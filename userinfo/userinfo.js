@@ -6,6 +6,7 @@ require("./user");
 const user_model=mongoose.model("user");
 
 const bodyParser=require("body-parser");
+const { type } = require("os");
 
 app.use(bodyParser.json());
 
@@ -29,24 +30,60 @@ app.get("/user",(req,res)=>{
     })
 })
 
+app.get("/userlist",(req,res)=>{
+    user_model.find().then(user_list=>{
+        res.send(user_list);
+    })
+})
+
+
+app.get("/userid",(req,res)=>{
+    user_model.find().then(user_listt=>{
+        for(var i in user_listt)
+            {
+                if(i.First_name==req.body.First_name && i.Last_name==req.body.Last_name)
+                    {
+                        console.log(i._id);
+                        res.send(i._id);
+                        break;
+                    }
+            }
+            res.send("not found");
+    })
+})
+
 app.post("/user",(req,res)=>{
     console.log("data recieved");
-    var newUserdata={
-        name:req.body.name,
-        booked:req.body.booked
-    }
-    var newuser=new user(newUserdata);
-    newuser.save().then(()=>{
-        console,log("new user info added")
-    }).catch((err)=>{
-        if(err)
-            throw err;
-    })
+    console.log(req.body);
+   
+    if((req.body.Last_name)[0]=='a'||(req.body.Last_name)[0]=='A')
+        {
+            
+            var newUserdata={
+                First_name:req.body.First_name,
+                Last_name:req.body.Last_name,
+                contactnumber:req.body.contactnumber,
+                emailid:req.body.emailid
+            }
+            var newuser=new user_model(newUserdata);
+            newuser.save().then(()=>{
+                console,log("new user info added")
+            }).catch((err)=>{
+                if(err)
+                    throw err;
+            })
+        
+            
+            res.send("data recieved");
 
-    
-    res.send("data recieved");
+        }
+        else
+        {
+            res.send("The last name must start with 'a'");
+
+}
 })
 
 app.listen(3000,()=>{
-    console.log("server xvffg");
+    console.log("server for userregistration");
 })
