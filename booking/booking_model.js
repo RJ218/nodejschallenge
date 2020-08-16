@@ -10,13 +10,10 @@ mongoose.model("booking" , {
         type:String,
         require:true
     },
-   Time:{
-       type:String,
-       require:true
-   },
-   Date:{
-       type:String,
-       require:true
+ 
+   timestmp:{
+        type:Number,
+        require:true
    }
    
 })

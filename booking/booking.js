@@ -22,16 +22,22 @@ app.get("/bookinginfo", (req, res) => {
     })
 })
 
-
+function toTimestamp(strDate){
+    var datum = Date.parse(strDate);
+    return datum/1000;
+}
 
 app.post("/booking", (req, res) => {
     let found1 = 0;
+    let res_timestamp=toTimestamp(req.body.Date+" "+req.body.Time);
     let found3 = 0;
+    let timestamp_found=0;
+    //console.log(toTimestamp(req.body.Date+" "+req.body.Time));
     axios.get("http://localhost:3001/userlist").then(response => {
-       // console.log(response.data);
-      //  console.log(req.body);
+        // console.log(response.data);
+        //  console.log(req.body);
         for (var i in response.data) {
-            console.log("i=" + i);
+           // console.log("i=" + i);
             if (response.data[i].First_name == req.body.name1)
                 found1 = 1;
             if (response.data[i].First_name == req.body.name2)
@@ -39,46 +45,90 @@ app.post("/booking", (req, res) => {
         }
         //console.log(found1 + "+" + found3);
     }).then(() => {
-        var date_found = 0;
+       
         axios.get("http://localhost:3003/bookinginfo").then(response => {
-            console.log(response.data);
-            console.log(req.body);
+            //console.log(response.data);
+            //console.log(req.body);
             for (var i in response.data) {
-                if (response.data[i].Date == req.body.Date)
-                    {date_found = 1;
+                //console.log(response.data[i].Date == req.body.Date);
+               // console.log(req.body.Date);
+               console.log((Math.abs(response.data[i].timestmp-res_timestamp)/1000));
+                console.log((((Math.abs(response.data[i].timestmp-res_timestamp))/3600 )%24));
+               if((((Math.abs(response.data[i].timestmp-res_timestamp))/3600 )%24)<1)
+                    {
+                        timestamp_found=1;
                         break;
                     }
             }
-            if (date_found == 0) {
-              console.log("date found");
+        }).then(() => {
+            //console.log(date_found);
+            if (timestamp_found == 1) {
+                res.send("already booked")
+                //console.log("date found");
+               
+              //  console.log(time_found);
+
+              /*
+                for(var i =0;i<time_found.length;i++)
+                    {
+                        if(Math.abs((time.getTime()-time_found[i].getTime())/(1000*60*60))>=1)
+                            {
+                                if (found1 == 1 && found3 == 1) {
+                                    var new_bookingData = {
+                                        name1: req.body.name1,
+                                        name2: req.body.name2,
+                                        Date: req.body.Date,
+                                        Time: req.body.Time
+                                    }
+                                    var newBooking = new booking_model(new_bookingData);
+                                    newBooking.save().then(() => {
+                                        console.log("data saved")
+                                        res.send("data saved");
+                                    }).catch((err) => {
+                                        if (err)
+                                            throw err;
+                                    })
+                                }
+                                else {
+                                    console.log("else part");
+                                    res.send("1"+1);
+                    
+                                }
+                                break;
+                            }
+
+                    }
+                res.send(`${toTimestamp(req.body.Date+" "+req.body.Time)}`);
+            */
             }
-            else
-            {
-                console.log("date not found");
+            else {
+               // console.log("date not found");
+                if (found1 == 1 && found3 == 1) {
+                    var new_bookingData = {
+                        name1: req.body.name1,
+                        name2: req.body.name2,
+                        timestmp:toTimestamp(req.body.Date+" "+req.body.Time)
+                    }
+                    var newBooking = new booking_model(new_bookingData);
+                    newBooking.save().then(() => {
+                        console.log("data saved")
+                        res.send("data saved");
+                    }).catch((err) => {
+                        if (err)
+                            throw err;
+                    })
+                }
+                else {
+                    console.log("else part");
+                    res.send("1"+1);
+    
+                }
             }
         })
 
-        if (found1 == 1 && found3 == 1) {
-            var new_bookingData = {
-                name1: req.body.name1,
-                name2: req.body.name2,
-                Date: req.body.Date,
-                Time: req.body.Time
-            }
-            var newBooking = new booking_model(new_bookingData);
-            newBooking.save().then(() => {
-                console.log("data saved")
-                res.send("data saved");
-            }).catch((err) => {
-                if (err)
-                    throw err;
-            })
-        }
-        else {
-            console.log("else part");
-            res.send("not found these names");
 
-        }
+
+
 
     })
 
@@ -91,3 +141,4 @@ app.get('/', (req, res) => {
 app.listen(3003, () => {
     console.log("this is booking server");
 })
+
