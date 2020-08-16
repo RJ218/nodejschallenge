@@ -11,6 +11,8 @@ app.get('/',(req,res)=>{
     res.send("This is the central microservice");
 })
 
+
+//for booking of a person
 app.post('/book',(req,res)=>{
     //console.log(req.body);
     var newbooking={
@@ -25,6 +27,8 @@ app.post('/book',(req,res)=>{
     })
 
     })
+
+    //for user registration
 app.post('/user_resgistration',(req,res)=>{
     var userinfo={
         First_name: req.body.First_name,

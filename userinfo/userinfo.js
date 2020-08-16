@@ -23,6 +23,7 @@ app.get('/',(req,res)=>{
 })
 
 
+//To get the list all the registered users
 app.get("/user",(req,res)=>{
     user_model.find().then(user_list=>{
         console.log(user_list);
@@ -36,22 +37,8 @@ app.get("/userlist",(req,res)=>{
     })
 })
 
-//ignore
-app.get("/userid",(req,res)=>{
-    user_model.find().then(user_listt=>{
-        for(var i in user_listt)
-            {
-                if(i.First_name==req.body.First_name && i.Last_name==req.body.Last_name)
-                    {
-                        console.log(i._id);
-                        res.send(i._id);
-                        break;
-                    }
-            }
-            res.send("not found");
-    })
-})
 
+//To add user information to the database
 app.post("/user",(req,res)=>{
     console.log("data recieved");
     console.log(req.body);

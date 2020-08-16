@@ -12,7 +12,7 @@ const bodyParser=require("body-parser");
 
 app.use(bodyParser.json());
 
-
+//To get all the registered user from db
 app.get('/userlist',(req,res)=>{
     axios.get("http://localhost:3000/user").then((response=>{
         console.log(response);
@@ -20,12 +20,6 @@ app.get('/userlist',(req,res)=>{
     }))
 })
 
-app.get('/userid',(req,res)=>{
-    axios.get("http://localhost:3000/userid").then((response=>{
-        console.log(response);
-        res.send(response);
-    }))
-})
 
 app.get('/',(req,res)=>{
     res.send("this is userlisting speaking.how u do")

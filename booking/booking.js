@@ -16,19 +16,26 @@ mongoose.connect('mongodb+srv://rachitjain:16Cse071@cluster0.poztc.mongodb.net/b
         console.log('The Mongoose connection is ready');
     }
 })
+
+//To get the list of all the bookings
 app.get("/bookinginfo", (req, res) => {
     booking_model.find().then(booking_list => {
         res.send(booking_list);
     })
 })
 
+
+//Function to calculate the time stamp
 function toTimestamp(strDate){
     var datum = Date.parse(strDate);
     return datum/1000;
 }
 
 
+
+//function to book a booking
 app.post("/booking", (req, res) => {
+
     console.log(req.body);
     let found1 = 0;
     let res_timestamp=toTimestamp(req.body.Date+" "+req.body.Time);
