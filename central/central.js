@@ -25,7 +25,18 @@ app.post('/book',(req,res)=>{
     })
 
     })
-
+app.post('/user_resgistration',(req,res)=>{
+    var userinfo={
+        First_name: req.body.First_name,
+        Last_name:req.body.Last_name,
+       contactnumber:req.body.contactnumber,
+       emailid:req.body.emailid
+    }
+    axios.post('http://localhost:3000/user',userinfo).then(response=>{
+        console.log(response.data);
+        res.send(response.data);
+    })
+})
 
 app.listen(3004,()=>{
     console.log("this is the central microservice");

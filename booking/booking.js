@@ -27,6 +27,7 @@ function toTimestamp(strDate){
     return datum/1000;
 }
 
+
 app.post("/booking", (req, res) => {
     console.log(req.body);
     let found1 = 0;
@@ -58,8 +59,10 @@ app.post("/booking", (req, res) => {
                 //console.log(response.data[i].Date == req.body.Date);
                // console.log(req.body.Date);
                console.log((Math.abs(response.data[i].timestmp-res_timestamp)/1000));
-                console.log((((Math.abs(response.data[i].timestmp-res_timestamp))/3600 )%24));
-               if((((Math.abs(response.data[i].timestmp-res_timestamp))/3600 )%24)<1)
+                console.log("hour diff"+(((Math.abs(response.data[i].timestmp-res_timestamp))/3600 )%24));
+                console.log("day diff"+(Math.floor((Math.abs(response.data[i].timestmp-res_timestamp))/3600 )/24));
+
+               if(((Math.abs(response.data[i].timestmp-res_timestamp)))<3600)
                     {
                         timestamp_found=1;
                         break;
@@ -129,6 +132,9 @@ app.post("/booking", (req, res) => {
     
                 }
             }
+        }).catch((err)=>{
+            if(err)
+                throw err;
         })
 
 
