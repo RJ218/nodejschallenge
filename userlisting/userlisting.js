@@ -16,6 +16,7 @@ app.use(bodyParser.json());
 app.get('/userlist',(req,res)=>{
     axios.get("http://localhost:3000/user").then((response=>{
         console.log(response);
+        res.send(response.data);
     }))
 })
 
