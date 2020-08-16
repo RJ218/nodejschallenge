@@ -28,6 +28,7 @@ function toTimestamp(strDate){
 }
 
 app.post("/booking", (req, res) => {
+    console.log(req.body);
     let found1 = 0;
     let res_timestamp=toTimestamp(req.body.Date+" "+req.body.Time);
     let found3 = 0;
@@ -45,7 +46,11 @@ app.post("/booking", (req, res) => {
         }
         //console.log(found1 + "+" + found3);
     }).then(() => {
-       
+       if(found1 == 0 || found3 == 0)
+        {
+            console.log("Person that you are trying to book do not exist.");
+            res.send("Person that you are trying to book do not exist.");
+        }
         axios.get("http://localhost:3003/bookinginfo").then(response => {
             //console.log(response.data);
             //console.log(req.body);
@@ -63,7 +68,7 @@ app.post("/booking", (req, res) => {
         }).then(() => {
             //console.log(date_found);
             if (timestamp_found == 1) {
-                res.send("already booked")
+                res.send("already booked choose another time")
                 //console.log("date found");
                
               //  console.log(time_found);
@@ -119,8 +124,8 @@ app.post("/booking", (req, res) => {
                     })
                 }
                 else {
-                    console.log("else part");
-                    res.send("1"+1);
+                    console.log("Person that you are trying to book do not exist.");
+                    res.send("Person that you are trying to book do not exist.");
     
                 }
             }
